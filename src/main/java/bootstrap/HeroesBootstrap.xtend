@@ -52,8 +52,9 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		robin = new SuperIndividuo() => [
 			nombre = "robin"
 			apellido = ""
+			password = "1234"
 			nombreYApellido = nombre + apellido
-			alias = "El chico maravilla"
+			alias = "Robin"
 			victorias = 2
 			derrotas = 2
 			empates = 4
@@ -147,9 +148,14 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 			danio = 10
 			resistencia = 10
 		]
+		
+		robin.agregarItemYOrdenaLista(navaja)
+		robin.agregarItemYOrdenaLista(bazooka)
+		robin.agregaAmigo(batman)
+		robin.agregaEnemigo(joker)
 		repositorioItems.agregarElemento(navaja)
 		repositorioItems.agregarElemento(bazooka)
-
+		
 		repositorioItems.agregarElemento(espejoMagico)
 //		repositorioItems.agregarElemento(navaja)
 //		repositorioItems.agregarElemento(bazooka)

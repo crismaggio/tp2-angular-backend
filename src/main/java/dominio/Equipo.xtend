@@ -11,8 +11,9 @@ import org.uqbar.commons.model.annotations.Transactional
 @Accessors
 @Observable
 class Equipo extends Entidad implements Defensores {
-	@JsonIgnore  var String nombre
-	@JsonIgnore SuperIndividuo lider
+	var String nombre
+	SuperIndividuo lider
+	SuperIndividuo fundador
 	@JsonIgnore List<SuperIndividuo> integrantes = new ArrayList
 	
 	def double poderGrupal() {
