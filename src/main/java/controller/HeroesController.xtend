@@ -150,7 +150,7 @@ class HeroesController {
 }
 		
 
-	@Get("/superIndividuoLogin/:id/equipos")
+	@Get("/superIndividuoLogineado/:id/equipos")
 	def Result equipos() {
 		try {
 			val List<Equipo> equipos = RepoIndividuo.instance.searchById(id).equipos
