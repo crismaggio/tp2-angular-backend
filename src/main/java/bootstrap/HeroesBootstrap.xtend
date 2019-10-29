@@ -18,6 +18,7 @@ import dominio.ItemCompuesto
 class HeroesBootstrap extends CollectionBasedBootstrap {
 
 	override run() {
+		var SuperIndividuo  mordred
 		var SuperIndividuo superman
 		var SuperIndividuo robin
 		var SuperIndividuo joker
@@ -28,7 +29,7 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		var Item navaja
 		var Item bazooka
 		var ItemCompuesto espejoMagico
-
+        
 		var repositorioSuperIndividuos = RepoIndividuo.instance
 		var repositorioItems = RepoItem.instance
 
@@ -50,6 +51,7 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		]
 		espejoMagico = new ItemCompuesto => [nombre = "espejoMagico"]
 		robin = new SuperIndividuo() => [
+			foto="https://img-cdn.hipertextual.com/files/2014/10/robin-batman-v-superman.jpg?"
 			nombre = "robin"
 			apellido = ""
 			password = "1234"
@@ -64,7 +66,25 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 			fuerza = 4.0
 			baseDeOperaciones = new Point(4, 5)
 		]
+			mordred= new SuperIndividuo() => [
+			foto="https://i.pinimg.com/236x/77/61/4f/77614f7975ee7c2454825fa38318fded.jpg"
+//			foto="https://i.pinimg.com/originals/db/e4/2d/dbe42dcefe9c722725afe79a67eba92c.jpg"
+			nombre = "mordred"
+			apellido = "pendragon"
+			password = "1234"
+			nombreYApellido = nombre + apellido
+			alias = "Saber"
+			victorias = 2
+			derrotas = 2
+			empates = 4
+			tipo = Heroe.getInstance
+			resistencia = 6.0
+			fecha_ini = LocalDate.now.minusYears(1)
+			fuerza = 4.0
+			baseDeOperaciones = new Point(4, 5)
+		]
 
+		
 		joker = new SuperIndividuo() => [
 			nombre = "El Joker"
 			apellido = ""
@@ -124,10 +144,11 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		RepoEquipo.instance.agregarElemento(oscuro)
 
 		fantastico.agregarAEquipo(robin)
+	    fantastico.agregarAEquipo(mordred)					
 		oscuro.agregarAEquipo(batman)
 		oscuro.agregarAEquipo(greenArrow)
 		oscuro.agregarAEquipo(robin)
-
+		repositorioSuperIndividuos.agregarElemento(mordred)
 		repositorioSuperIndividuos.agregarElemento(superman)
 		repositorioSuperIndividuos.agregarElemento(robin)
 		repositorioSuperIndividuos.agregarElemento(joker)
@@ -152,8 +173,6 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		robin.agregarItemYOrdenaLista(navaja)
 		robin.agregarItemYOrdenaLista(bazooka)
 		robin.agregaAmigo(batman)
-		robin.agregaAmigo(superman)
-		robin.agregaEnemigo(joker)
 		robin.agregaEnemigo(joker)
 		repositorioItems.agregarElemento(navaja)
 		repositorioItems.agregarElemento(bazooka)

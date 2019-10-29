@@ -7,7 +7,7 @@ import bootstrap.HeroesBootstrap
 class HeroesApp {
 	
 	def static void main(String[] args) {
-		new  HeroesBootstrap().run
+		new  HeroesBootstrap().run	
 		XTRest.start(9000, HeroesController)
 	}
 	

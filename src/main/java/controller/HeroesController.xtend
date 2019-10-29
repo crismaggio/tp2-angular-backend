@@ -7,14 +7,18 @@ import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.json.JSONUtils
 import dominio.SuperIndividuo
 import java.util.List
-import org.uqbar.xtrest.api.annotation.Post
+import dominio.Equipo
 import org.uqbar.xtrest.api.annotation.Delete
+import dominio.RepoEquipo
+import org.uqbar.xtrest.api.annotation.Post
+import org.uqbar.xtrest.api.annotation.Body
+import dominio.EquipoTemp
 
 @Controller
 class HeroesController {
-	
+
 	extension JSONUtils = new JSONUtils
-	
+
 	@Get("/superIndividuos")
 	def Result superIndividuos() {
 		try {
@@ -23,124 +27,117 @@ class HeroesController {
 			internalServerError(e.message)
 		}
 	}
-	
+
 	@Get("/username/:alias/password/:password")
 	def Result usuario() {
 		try {
-			val SuperIndividuo usuario= RepoIndividuo.instance.search(alias)
-			
-			if(usuario.password==password)
-			ok(usuario.toJson)	
-			
+			val SuperIndividuo usuario = RepoIndividuo.instance.search(alias)
+
+			if (usuario.password == password)
+				ok(usuario.toJson)
+
 		} catch (Exception e) {
 			internalServerError(e.message)
 		}
 	}
-	
-	
-	/** R E L A C I O N E S :  amigos - enemigos ======  Comienzo */
-	
+
 	@Get("/superIndividuoLogin/:id/amigos")
 	def Result amigos() {
 		try {
-			val List<SuperIndividuo> amigos= RepoIndividuo.instance.searchById(id).amigos
-			
-			
-			ok(amigos.toJson)	
-			
+			val List<SuperIndividuo> amigos = RepoIndividuo.instance.searchById(id).amigos
+
+			ok(amigos.toJson)
+
 		} catch (Exception e) {
 			internalServerError(e.message)
 		}
-	}	
-	
+	}
+//@Get("/superIndividuoLogin/:id/amigos")
+//	def Result amigos() {
+//		try {
+//			val List<SuperIndividuo> amigos = RepoIndividuo.instance.searchById(id).amigos
+//
+//			ok(amigos.toJson)
+//
+//		} catch (Exception e) {
+//			internalServerError(e.message)
+//		}
+//	}
+//	
+	@Get("/superIndividuoLogin/:id/disponiblesAmigos")
+	def Result disponiblesAmigos() {
+		try {
+			val List<SuperIndividuo> amigos = RepoIndividuo.instance.elementos.filter[!RepoIndividuo.instance.searchById(id).amigos.contains(it)].toList  
+
+			ok(amigos.toJson)
+
+		} catch (Exception e) {
+			internalServerError(e.message)
+		}
+	}
+	@Get("/superIndividuoLogin/:id/disponiblesEnemigos")
+	def Result disponiblesEnemigos() {
+		try {
+			val List<SuperIndividuo> enemigos = RepoIndividuo.instance.elementos.filter[!RepoIndividuo.instance.searchById(id).enemigos.contains(it)].toList  
+
+			ok(enemigos.toJson)
+
+		} catch (Exception e) {
+			internalServerError(e.message)
+		}
+	}
 	@Get("/superIndividuoLogin/:id/enemigos")
 	def Result enemigos() {
 		try {
-			val List<SuperIndividuo> enemigos= RepoIndividuo.instance.searchById(id).enemigos
-			
-			ok(enemigos.toJson)
-			
-		} catch (Exception e) {
-			internalServerError(e.message)
-		}
-	}	
-	
-		@Get("/superIndividuoLogin/:id/amigosXid")
-	def Result amigosXid() {
-		try {
-			val List<String> amigosXid= RepoIndividuo.instance.searchById(id).amigos.map(a|a.id)
-			
-			ok(amigosXid.toJson)
-			
-		} catch (Exception e) {
-			internalServerError(e.message)
-		}
-	}	
-	
-		@Get("/superIndividuoLogin/:id/enemigosXid")
-	def Result enemigosXid() {
-		try {
-			val List<String> enemigosXid= RepoIndividuo.instance.searchById(id).enemigos.map(a|a.id)
-			
-			ok(enemigosXid.toJson)
-			
+			val List<SuperIndividuo> amigos = RepoIndividuo.instance.searchById(id).enemigos
+
+			ok(amigos.toJson)
+
 		} catch (Exception e) {
 			internalServerError(e.message)
 		}
 	}
 	
-	@Post("/superIndividuoLogin/:id/amigos/:idAmigo")
-	def agregarAmigo(){
+
+	@Delete("/usuarios/:id/equipos/:idEquipo")
+	def Result eliminarAmigo() {
 		try {
-			var SuperIndividuo logeado = RepoIndividuo.instance.search(id)
-			val amigoAgregado = RepoIndividuo.instance.search(idAmigo)
-			val agregadoOk = logeado.agregaAmigo(amigoAgregado)
-			
-			return if (logeado.amigos.contains(agregadoOk)) ok() else badRequest("No fue posible agregar el amigo con identificador " + amigoAgregado.id)
+			val SuperIndividuo superIndividuoLogin = RepoIndividuo.instance.searchById(id)
+			val Equipo equipo = RepoEquipo.instance.searchById(idEquipo)
+
+			val eliminadoOk = superIndividuoLogin.equipos.remove(equipo)
+			return if(eliminadoOk) ok() else badRequest("No existe el equipo con identificador " + equipo.id)
 		} catch (Exception e) {
 			badRequest(e.message)
 		}
 	}
-	
-	@Delete("/superIndividuoLogin/:id/amigos/:idAmigo")
-	def eliminarAmigo(){
+
+
+	@Post("/usuarios/:id/equipos")
+	def Result agregarEventoPropio(@Body String body) {
+		
+				var SuperIndividuousuariod = RepoIndividuo.instance.searchById(id)
+			var EquipoTemp equipotem = body.fromJson(EquipoTemp)
+			var SuperIndividuolider = RepoIndividuo.instance.searchById(equipotem.idlider)
+			var  SuperIndividuofundador = RepoIndividuo.instance.searchById(equipotem.idfundador)
+			var Equipo equipo = RepoEquipo.instance.searchById(equipotem.id)
+ equipo.lider = SuperIndividuolider
+  equipo.fundador  = SuperIndividuofundador
+  print("xz<x<z")   
+      equipo.nombre=equipotem.nombre
+      ok()
+}
+		
+
+	@Get("/superIndividuoLogin/:id/equipos")
+	def Result equipos() {
 		try {
-			var SuperIndividuo logeado = RepoIndividuo.instance.search(id)
-			val amigoEliminado = RepoIndividuo.instance.search(idAmigo)
-			val eliminadoOk = logeado.amigos.remove(amigoEliminado)
-			
-			return if (!logeado.amigos.contains(eliminadoOk)) ok() else badRequest("No fue posible eliminar el amigo con identificador " + amigoEliminado.id)
+			val List<Equipo> equipos = RepoIndividuo.instance.searchById(id).equipos
+
+			ok(equipos.toJson)
+
 		} catch (Exception e) {
-			badRequest(e.message)
+			internalServerError(e.message)
 		}
 	}
-	
-	@Post("/superIndividuoLogin/:id/amigos/:idEnemigo")
-	def agregarEnemigo(){
-		try {
-			var SuperIndividuo logeado = RepoIndividuo.instance.search(id)
-			val enemigoAgregado = RepoIndividuo.instance.search(idEnemigo)
-			val agregadoOk = logeado.agregaEnemigo(enemigoAgregado)
-			
-			return if (logeado.enemigos.contains(agregadoOk)) ok() else badRequest("No fue posible agregar el enemigo con identificador " + enemigoAgregado.id)
-		} catch (Exception e) {
-			badRequest(e.message)
-		}
-	}
-	
-	@Delete("/superIndividuoLogin/:id/amigos/:idAmigo")
-	def eliminarEnemigo(){
-		try {
-			var SuperIndividuo logeado = RepoIndividuo.instance.search(id)
-			val enemigoEliminado = RepoIndividuo.instance.search(idAmigo)
-			val eliminadoOk = logeado.enemigos.remove(enemigoEliminado)
-			
-			return if (!logeado.enemigos.contains(eliminadoOk)) ok() else badRequest("No fue posible eliminar el enemigo con identificador " + enemigoEliminado.id)
-		} catch (Exception e) {
-			badRequest(e.message)
-		}
-	}
-	
-	/** R E L A C I O N E S :  amigos - enemigos ===========  Fin */
-	
 }

@@ -10,6 +10,7 @@ import org.uqbar.commons.model.annotations.Transactional
 @Transactional
 @Accessors
 @Observable
+
 class Equipo extends Entidad implements Defensores {
 	var String nombre
 	SuperIndividuo lider
@@ -110,10 +111,30 @@ class Equipo extends Entidad implements Defensores {
 	}
 
 	override actualizar(Entidad elemento) {
+		var equipo =elemento as Equipo
+		 nombre=equipo.nombre
+	 fundador=equipo.fundador
+	 lider=equipo.lider
 	}
 
 	override tieneValorBusqueda(String valor) {
 		nombre.contains(valor) || integrantesConLider.exists[i|i.alias.contains(valor)]
 	}
 
+}
+@Accessors
+class EquipoTemp {
+	
+	String id 
+     String   nombre 
+     String   idlider
+     String   idfundador
+	
+	
+	
+	
+	
+	
+	
+	
 }
