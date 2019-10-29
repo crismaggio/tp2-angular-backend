@@ -49,7 +49,7 @@ abstract class Repositorio<T extends Entidad> {
 		searchById(elemento.id).actualizar(elemento)
 	}
 
-	def void delete(T elemento) {
+	def Boolean delete(T elemento) {
 		elementos.remove(elemento)
 	}
 

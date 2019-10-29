@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 @JsonIgnoreProperties("victorias", "derrotas", "nombreYApellido","empates", "baseDeOperaciones", "fecha_ini", "fuerza", "dinero", "resistencia", "mejoras", "notificaciones", "obs", "determinadaCantDerrotas", "password")
 class SuperIndividuo extends Entidad implements Defensores {
 	List<TipoDeIndividuo> tiposPosibles = #[Heroe.instance, Antiheroe.instance, Villano.instance]
+	String foto
 	String nombre
 	String apellido
 	String nombreYApellido
@@ -243,4 +244,13 @@ override actualizar(Entidad elemento) {
 		lista.filter[x|this.esAmigo(x)].size
 	}
 
+}
+@Accessors
+class Superjson {
+	
+	String poderAtaque
+	String efectividad
+	String experiencia
+	
+	
 }
