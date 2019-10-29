@@ -13,7 +13,10 @@ import dominio.RepoEquipo
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.api.annotation.Body
 import dominio.EquipoTemp
+<<<<<<< HEAD
 import dominio.Superjson
+=======
+>>>>>>> 1fd26497fb3e58e78b97221d0f42479eaf666f28
 
 @Controller
 class HeroesController {
@@ -29,6 +32,7 @@ class HeroesController {
 		}
 	}
 
+<<<<<<< HEAD
 	@Get("/username/:alias")
 	def Result usuario() {
 		try {
@@ -49,6 +53,8 @@ class HeroesController {
 		}
 	}
 	
+=======
+>>>>>>> 1fd26497fb3e58e78b97221d0f42479eaf666f28
 	@Get("/username/:alias/password/:password")
 	def Result usuario() {
 		try {
@@ -103,6 +109,8 @@ class HeroesController {
 
 			ok(enemigos.toJson)
 
+<<<<<<< HEAD
+=======
 		} catch (Exception e) {
 			internalServerError(e.message)
 		}
@@ -114,10 +122,25 @@ class HeroesController {
 
 			ok(amigos.toJson)
 
+>>>>>>> 1fd26497fb3e58e78b97221d0f42479eaf666f28
 		} catch (Exception e) {
 			internalServerError(e.message)
 		}
 	}
+<<<<<<< HEAD
+	@Get("/superIndividuoLogin/:id/enemigos")
+	def Result enemigos() {
+		try {
+			val List<SuperIndividuo> amigos = RepoIndividuo.instance.searchById(id).enemigos
+
+			ok(amigos.toJson)
+
+		} catch (Exception e) {
+			internalServerError(e.message)
+		}
+	}
+=======
+>>>>>>> 1fd26497fb3e58e78b97221d0f42479eaf666f28
 	
 
 	@Delete("/usuarios/:id/equipos/:idEquipo")
