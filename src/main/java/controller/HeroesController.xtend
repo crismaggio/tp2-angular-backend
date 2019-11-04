@@ -16,6 +16,7 @@ import dominio.EquipoTemp
 import dominio.Superjson
 import dominio.RepoItem
 import org.uqbar.xtrest.api.annotation.Put
+import dominio.UsuarioAuxiliar
 
 @Controller
 class HeroesController {
@@ -40,14 +41,15 @@ class HeroesController {
 		}
 	}
 
-	@Get("/username/:alias")
+	@Get("/username/:id")
 	def Result usuario() {
 		try {
 
 			var Superjson usuario = new Superjson => [
-				poderAtaque = RepoIndividuo.instance.search(alias).poderDeAtaque.toJson
-				efectividad = RepoIndividuo.instance.search(alias).efectividadSuperIndividuo.toJson
-				experiencia = RepoIndividuo.instance.search(alias).experiencia.toJson
+				poderAtaque = RepoIndividuo.instance.searchById(id).poderDeAtaque.toJson
+				efectividad = RepoIndividuo.instance.searchById(id).efectividadSuperIndividuo.toJson
+				experiencia = RepoIndividuo.instance.searchById(id).experiencia.toJson
+				tipo = RepoIndividuo.instance.searchById(id).tipo.descripcion
 			]
 
 			ok(usuario.toJson)
@@ -55,6 +57,25 @@ class HeroesController {
 		} catch (Exception e) {
 			internalServerError(e.message)
 		}
+	}
+
+	@Get("/usuario/:id/items")
+	def Result items() {
+
+		val SuperIndividuo usuario = RepoIndividuo.instance.searchById(id)
+		val items = usuario.items
+		println(items)
+		ok(items.toJson)
+
+	}
+
+	@Get("/usuario/:id")
+	def Result usuarioid() {
+
+		val SuperIndividuo usuario = RepoIndividuo.instance.searchById(id)
+
+		ok(usuario.toJson)
+
 	}
 
 	@Get("/username/:alias/password/:password")
@@ -81,39 +102,11 @@ class HeroesController {
 			internalServerError(e.message)
 		}
 	}
-
-//@Get("/superIndividuoLogin/:id/amigos")
-//	def Result amigos() {
-//		try {
-//			val List<SuperIndividuo> amigos = RepoIndividuo.instance.searchById(id).amigos
-//
-//			ok(amigos.toJson)
-//
-//		} catch (Exception e) {
-//			internalServerError(e.message)
-//		}
-//	}
-//	
-	@Get("/superIndividuoLogin/:id/disponiblesAmigos")
-	def Result disponiblesAmigos() {
+	
+	@Get("/superIndividuoLogin/:id/enemigos")
+	def Result enemigos() {
 		try {
-			val List<SuperIndividuo> amigos = RepoIndividuo.instance.elementos.filter [
-				!RepoIndividuo.instance.searchById(id).amigos.contains(it)
-			].toList
-
-			ok(amigos.toJson)
-
-		} catch (Exception e) {
-			internalServerError(e.message)
-		}
-	}
-
-	@Get("/superIndividuoLogin/:id/disponiblesEnemigos")
-	def Result disponiblesEnemigos() {
-		try {
-			val List<SuperIndividuo> enemigos = RepoIndividuo.instance.elementos.filter [
-				!RepoIndividuo.instance.searchById(id).enemigos.contains(it)
-			].toList
+			val List<SuperIndividuo> enemigos = RepoIndividuo.instance.searchById(id).enemigos
 
 			ok(enemigos.toJson)
 
@@ -122,12 +115,27 @@ class HeroesController {
 		}
 	}
 
-	@Get("/superIndividuoLogin/:id/enemigos")
-	def Result enemigos() {
+//@Get("/superIndividuoLogin/:id/amigos")
+// def Result amigos() {
+// try {
+// val List<SuperIndividuo> amigos = RepoIndividuo.instance.searchById(id).amigos
+//
+// ok(amigos.toJson)
+//
+// } catch (Exception e) {
+// internalServerError(e.message)
+// }
+// }
+//
+	@Get("/usuario/:id/usuarios")
+	def Result usuarios() {
 		try {
-			val List<SuperIndividuo> amigos = RepoIndividuo.instance.searchById(id).enemigos
+			val List<SuperIndividuo> usuarios = RepoIndividuo.instance.elementos.filter [
+				!RepoIndividuo.instance.searchById(id).amigos.contains(it) &&
+					it != RepoIndividuo.instance.searchById(id)
+			].toList.filter[!RepoIndividuo.instance.searchById(id).enemigos.contains(it)].toList
 
-			ok(amigos.toJson)
+			ok(usuarios.toJson)
 
 		} catch (Exception e) {
 			internalServerError(e.message)
@@ -172,7 +180,7 @@ class HeroesController {
 			RepoEquipo.instance.elementos.remove(equipo)
 			val eliminadoOk = equipo.integrantes.removeAll(equipo.integrantes)
 
-//			val eliminadoOk = superIndividuoLogin.equipos.remove(equipo)
+// val eliminadoOk = superIndividuoLogin.equipos.remove(equipo)
 			return if(eliminadoOk) ok() else badRequest("No existe el equipo con identificador " + equipo.id)
 		} catch (Exception e) {
 			badRequest(e.message)
@@ -182,21 +190,65 @@ class HeroesController {
 	@Post("/usuarios/:id/equipos")
 	def Result agregarEventoPropio(@Body String body) {
 
-		
+		var SuperIndividuousuariod = RepoIndividuo.instance.searchById(id)
 		var EquipoTemp equipotem = body.fromJson(EquipoTemp)
 		var SuperIndividuolider = RepoIndividuo.instance.searchById(equipotem.idlider)
 		var SuperIndividuofundador = RepoIndividuo.instance.searchById(equipotem.idfundador)
 		var Equipo equipo = RepoEquipo.instance.searchById(equipotem.id)
 		equipo.lider = SuperIndividuolider
 		equipo.fundador = SuperIndividuofundador
+		print("xz<x<z")
 		equipo.nombre = equipotem.nombre
 		ok()
 	}
 
+//
+	@Put("/usuario/:id/amigos")
+	def Result actualizarAmigos(@Body String body) {
+		println("lo que me viene del front-end: " + body)
+		println(" ")
+		val usuario = body.fromJson(UsuarioAuxiliar)
+
+// var objectMapper = new ObjectMapper()
+// var jsonRecibido = objectMapper.readTree(body)
+//
+// val amigosPorAgregar = jsonRecibido.get("amigos").toList
+// println("amigosPorAgregar: " + usuario.amigos )
+		var usuarioBackend = RepoIndividuo.instance.searchById(id)
+		usuarioBackend.amigos.removeAll(usuarioBackend.amigos)
+		println("usuarioBackend sin amigos: " + usuario.amigos)
+
+		usuarioBackend.amigos.addAll(usuario.amigos.map[RepoIndividuo.instance.searchById(it)])
+		println("usuarioBackend con amigos: " + usuario.amigos)
+		ok()
+	}
+
+//	@Put("/usuario/:id/enemigos")
+//	def Result actualizarEnemigos(@Body String body) {
+//		println("lo que me viene del front-end: " + body)
+//		println(" ")
+//		val usuario = body.fromJson(UsuarioAuxiliar)
+//
+//		var usuarioBackend = RepoIndividuo.instance.searchById(id)
+//		usuarioBackend.enemigos.removeAll(usuarioBackend.enemigos)
+//		println("usuarioBackend sin enemigos: " + usuario.enemigos)
+//
+//		usuarioBackend.enemigos.addAll(usuario.enemigos.map[RepoIndividuo.instance.searchById(it)])
+//		println("usuarioBackend con enemigos: " + usuario.enemigos)
+//		ok()
+//	}
+//
+// @Put("/usuario/:id/amigos")
+// def Result agregarAmigo(@Body String body) {
+// var individuo = body.fromJson(SuperIndividuo)
+// var supelog = RepoIndividuo.instance.searchById(id)
+// supelog.agregaAmigo(RepoIndividuo.instance.searchById(individuo.id))
+// ok()
+// }
 	@Put("/superIndividuoLogin/:id/usuarioagregar/:idusuario")
 	def Result agregarOsacar(@Body String body) {
 
-		var String accione = body.fromJson(String)
+		var String accione = body // .fromJson(String)
 		if (accione == "amigo") {
 			RepoIndividuo.instance.searchById(id).amigos.add(RepoIndividuo.instance.searchById(idusuario))
 		} else {

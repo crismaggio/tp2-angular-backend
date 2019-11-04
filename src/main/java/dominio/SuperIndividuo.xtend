@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 @Observable
 @JsonIgnoreProperties("victorias", "derrotas", "nombreYApellido","empates", "baseDeOperaciones", "fecha_ini", "fuerza", "dinero", "resistencia", "mejoras", "notificaciones", "obs", "determinadaCantDerrotas", "password")
 class SuperIndividuo extends Entidad implements Defensores {
-	List<TipoDeIndividuo> tiposPosibles = #[Heroe.instance, Antiheroe.instance, Villano.instance]
+	@JsonIgnore List<TipoDeIndividuo> tiposPosibles = #[Heroe.instance, Antiheroe.instance, Villano.instance]
 	String foto
 	String nombre
 	String apellido
@@ -25,16 +25,16 @@ class SuperIndividuo extends Entidad implements Defensores {
 	int victorias
 	int derrotas
 	int empates
-	  String  password
+	String password
 	Point baseDeOperaciones
-	TipoDeIndividuo tipo
+	@JsonIgnore TipoDeIndividuo tipo
 	LocalDate fecha_ini = LocalDate.now
 	Double fuerza
 
-	List<Equipo> equipos = new ArrayList
-	List<Item> items = new ArrayList
-	List<SuperIndividuo> enemigos = new ArrayList
-	List<SuperIndividuo> amigos = new ArrayList
+	@JsonIgnore List<Equipo> equipos = new ArrayList
+	@JsonIgnore List<Item> items = new ArrayList
+	@JsonIgnore List<SuperIndividuo> enemigos = new ArrayList
+	@JsonIgnore List<SuperIndividuo> amigos = new ArrayList
 	Double dinero
 	Double resistencia
 	List<Mejora> mejoras = new ArrayList
@@ -227,30 +227,39 @@ class SuperIndividuo extends Entidad implements Defensores {
 //		amigos = superIndividuoActualizado.amigos
 //
 //	}
-override actualizar(Entidad elemento) {
+	override actualizar(Entidad elemento) {
 		val superIndividuoActualizado = elemento as SuperIndividuo
 //		amigos = superIndividuoActualizado.amigos
-		        this.nombre=superIndividuoActualizado.nombre
-	              this.apellido=superIndividuoActualizado.apellido
-	               this.victorias=superIndividuoActualizado.victorias
-	                  this.derrotas=superIndividuoActualizado.derrotas
-                     this.empates=superIndividuoActualizado.empates
-	              this.fecha_ini=superIndividuoActualizado.fecha_ini
-	              this.fuerza=superIndividuoActualizado.fuerza
-	             this.resistencia=   superIndividuoActualizado.resistencia
-	             this.tipo=superIndividuoActualizado.tipo
+		this.nombre = superIndividuoActualizado.nombre
+		this.apellido = superIndividuoActualizado.apellido
+		this.victorias = superIndividuoActualizado.victorias
+		this.derrotas = superIndividuoActualizado.derrotas
+		this.empates = superIndividuoActualizado.empates
+		this.fecha_ini = superIndividuoActualizado.fecha_ini
+		this.fuerza = superIndividuoActualizado.fuerza
+		this.resistencia = superIndividuoActualizado.resistencia
+		this.tipo = superIndividuoActualizado.tipo
 	}
+
 	def cantidaDeamigosEnElEquipo(List<SuperIndividuo> lista) {
 		lista.filter[x|this.esAmigo(x)].size
 	}
 
 }
+
 @Accessors
 class Superjson {
-	
+    String tipo
 	String poderAtaque
 	String efectividad
 	String experiencia
+
+}
+@Accessors
+class UsuarioAuxiliar {
+    String id
 	
-	
+	 List<String>amigos
+//	 List<String>enemigos
+
 }
