@@ -205,38 +205,34 @@ class HeroesController {
 //
 	@Put("/usuario/:id/amigos")
 	def Result actualizarAmigos(@Body String body) {
-		println("lo que me viene del front-end: " + body)
-		println(" ")
+
+
 		val usuario = body.fromJson(UsuarioAuxiliar)
 
-// var objectMapper = new ObjectMapper()
-// var jsonRecibido = objectMapper.readTree(body)
-//
-// val amigosPorAgregar = jsonRecibido.get("amigos").toList
-// println("amigosPorAgregar: " + usuario.amigos )
+
 		var usuarioBackend = RepoIndividuo.instance.searchById(id)
 		usuarioBackend.amigos.removeAll(usuarioBackend.amigos)
-		println("usuarioBackend sin amigos: " + usuario.amigos)
+
 
 		usuarioBackend.amigos.addAll(usuario.amigos.map[RepoIndividuo.instance.searchById(it)])
-		println("usuarioBackend con amigos: " + usuario.amigos)
-		ok()
+
+		ok(usuarioBackend.amigos.toJson)
 	}
 
-//	@Put("/usuario/:id/enemigos")
-//	def Result actualizarEnemigos(@Body String body) {
-//		println("lo que me viene del front-end: " + body)
-//		println(" ")
-//		val usuario = body.fromJson(UsuarioAuxiliar)
-//
-//		var usuarioBackend = RepoIndividuo.instance.searchById(id)
-//		usuarioBackend.enemigos.removeAll(usuarioBackend.enemigos)
-//		println("usuarioBackend sin enemigos: " + usuario.enemigos)
-//
-//		usuarioBackend.enemigos.addAll(usuario.enemigos.map[RepoIndividuo.instance.searchById(it)])
-//		println("usuarioBackend con enemigos: " + usuario.enemigos)
-//		ok()
-//	}
+	@Put("/usuario/:id/enemigos")
+	def Result actualizarEnemigos(@Body String body) {
+	
+
+		val usuario = body.fromJson(UsuarioAuxiliar)
+
+		var usuarioBackend = RepoIndividuo.instance.searchById(id)
+		usuarioBackend.enemigos.removeAll(usuarioBackend.enemigos)
+
+
+		usuarioBackend.enemigos.addAll(usuario.enemigos.map[RepoIndividuo.instance.searchById(it)])
+
+		ok(usuarioBackend.enemigos.toJson)
+	}
 //
 // @Put("/usuario/:id/amigos")
 // def Result agregarAmigo(@Body String body) {

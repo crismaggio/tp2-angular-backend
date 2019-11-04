@@ -260,6 +260,6 @@ class UsuarioAuxiliar {
     String id
 	
 	 List<String>amigos
-//	 List<String>enemigos
+	 List<String>enemigos
 
 }
