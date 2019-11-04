@@ -172,6 +172,7 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		
 		robin.agregarItemYOrdenaLista(navaja)
 		robin.agregarItemYOrdenaLista(bazooka)
+		mordred.agregarItemYOrdenaLista(bazooka)
 		robin.agregaAmigo(batman)
 		robin.agregaEnemigo(joker)
 		repositorioItems.agregarElemento(navaja)
