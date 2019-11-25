@@ -69,6 +69,16 @@ class HeroesController {
 
 	}
 
+	@Get("/items")
+	def Result items() {
+		ok(RepoItem.instance.elementos.toJson)
+	}
+	
+	@Get("/items/:id")
+	def Result itemById() {
+		ok(RepoItem.instance.searchById(id).toJson)
+	}
+	
 	@Get("/usuario/:id")
 	def Result usuarioid() {
 
@@ -219,6 +229,21 @@ class HeroesController {
 		ok(usuarioBackend.amigos.toJson)
 	}
 
+	@Put("/equipo/:id")
+	def Result actualizarEquipo(@Body String body) {
+
+
+		val usuario = body.fromJson(UsuarioAuxiliar)
+
+
+		var usuarioBackend = RepoIndividuo.instance.searchById(id)
+		usuarioBackend.amigos.removeAll(usuarioBackend.amigos)
+
+
+		usuarioBackend.amigos.addAll(usuario.amigos.map[RepoIndividuo.instance.searchById(it)])
+
+		ok(usuarioBackend.amigos.toJson)
+	}
 	@Put("/usuario/:id/enemigos")
 	def Result actualizarEnemigos(@Body String body) {
 	

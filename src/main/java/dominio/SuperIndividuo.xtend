@@ -22,6 +22,7 @@ class SuperIndividuo extends Entidad implements Defensores {
 	String apellido
 	String nombreYApellido
 	String alias
+	String mail = "MAIL@MAIL.COM"
 	int victorias
 	int derrotas
 	int empates
