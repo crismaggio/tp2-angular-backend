@@ -10,6 +10,7 @@ import java.util.ArrayList
 import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.commons.model.annotations.Transactional
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import java.util.Locale
 
 @Transactional
 @Accessors
@@ -42,7 +43,18 @@ class SuperIndividuo extends Entidad implements Defensores {
 	List<String> notificaciones = new ArrayList
 	List<observer> obs = new ArrayList
 	int determinadaCantDerrotas = 5
+	List<ItemComprado> itemsComprados = new ArrayList 
 
+	List<Item> listaItemPorTiempo = new ArrayList
+
+// Descomentado hasta que traiga las fechas por item	
+//	List<ItemCompradoEnUnaFecha> listaItemPorTiempo = new ArrayList
+//	def actualizarListaItemsCompradosDuranteUltimaSemana(){
+//		listaItemPorTiempo = listaItemPorTiempo.filter[7 <= Period.between(it.fechaCompra, LocalDate.now).days].toList
+//	}
+//	def ultimosItemsComprados(){
+//		return listaItemPorTiempo.map[it.item].toList
+//	}
 	def igresaraUnEquipo(Equipo equipo) {
 		equipos.add(equipo)
 	}
@@ -250,17 +262,30 @@ class SuperIndividuo extends Entidad implements Defensores {
 
 @Accessors
 class Superjson {
-    String tipo
+	String tipo
 	String poderAtaque
 	String efectividad
 	String experiencia
 
 }
+
+@Accessors
+class ItemComprado {
+	Item item
+	int cantidad
+	
+	new(Item _item, int _cantidad){
+		item = _item
+		cantidad = _cantidad
+	}
+	
+}
+
 @Accessors
 class UsuarioAuxiliar {
-    String id
-	
-	 List<String>amigos
-	 List<String>enemigos
+	String id
+
+	List<String> amigos
+	List<String> enemigos
 
 }

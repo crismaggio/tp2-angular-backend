@@ -126,9 +126,16 @@ class RepoIndividuo extends Repositorio<SuperIndividuo> {
 
 }
 
+@Accessors
 class RepoItem extends Repositorio<Item> {
 	static RepoItem instance // = new RepoItem
-
+	List<ItemComprado> itemsComprados = new ArrayList 
+	
+	def void agregarElemento(Item item,int cantidad) {
+		item.setId(asignarId)
+		itemsComprados.add(new ItemComprado(item, cantidad))
+	}
+	
 	def static getInstance() {
 		if (instance === null) {
 			return instance = new RepoItem
@@ -136,6 +143,15 @@ class RepoItem extends Repositorio<Item> {
 			instance
 		}
 	}
+	
+	def searchItemCompradoById(String id) {
+//		itemsComprados.findFirst[it.item.id.equals(id)]
+//		if (!validarID(id)) {
+//			throw new RepositorioException("No se encontro el id " + id)
+//		}
+		return	itemsComprados.findFirst[it.item.id.equals(id)]
+	}
+	
 	override String asignarId() {
 
 		"I" + proximoId()

@@ -13,12 +13,13 @@ import dominio.RepoItem
 import dominio.Heroe
 import dominio.Villano
 import dominio.ItemCompuesto
+import dominio.ItemComprado
 
 @Observable
 class HeroesBootstrap extends CollectionBasedBootstrap {
 
 	override run() {
-		var SuperIndividuo  mordred
+		var SuperIndividuo mordred
 		var SuperIndividuo superman
 		var SuperIndividuo robin
 		var SuperIndividuo joker
@@ -27,12 +28,15 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		var Equipo fantastico
 		var Equipo oscuro
 		var Item navaja
+		var Item espada
+		var Item granada
 		var Item bazooka
 		var ItemCompuesto espejoMagico
-        
+		var ItemComprado primerItem
+		var ItemComprado segundoItem 
 		var repositorioSuperIndividuos = RepoIndividuo.instance
 		var repositorioItems = RepoItem.instance
-
+      
 		superman = new SuperIndividuo() => [
 			nombre = "Clark"
 			apellido = "Kent"
@@ -49,9 +53,9 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 			baseDeOperaciones = new Point(4, 5)
 			fecha_ini = LocalDate.of(1900, 10, 10) // Para hacerlo Senior
 		]
-		espejoMagico = new ItemCompuesto => [nombre = "espejoMagico"]
+
 		robin = new SuperIndividuo() => [
-			foto="https://img-cdn.hipertextual.com/files/2014/10/robin-batman-v-superman.jpg?"
+			foto = "https://img-cdn.hipertextual.com/files/2014/10/robin-batman-v-superman.jpg?"
 			nombre = "robin"
 			apellido = ""
 			password = "1234"
@@ -66,8 +70,8 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 			fuerza = 4.0
 			baseDeOperaciones = new Point(4, 5)
 		]
-			mordred= new SuperIndividuo() => [
-			foto="https://i.pinimg.com/236x/77/61/4f/77614f7975ee7c2454825fa38318fded.jpg"
+		mordred = new SuperIndividuo() => [
+			foto = "https://i.pinimg.com/236x/77/61/4f/77614f7975ee7c2454825fa38318fded.jpg"
 //			foto="https://i.pinimg.com/originals/db/e4/2d/dbe42dcefe9c722725afe79a67eba92c.jpg"
 			nombre = "mordred"
 			apellido = "pendragon"
@@ -84,7 +88,6 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 			baseDeOperaciones = new Point(4, 5)
 		]
 
-		
 		joker = new SuperIndividuo() => [
 			nombre = "El Joker"
 			apellido = ""
@@ -144,7 +147,7 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		RepoEquipo.instance.agregarElemento(oscuro)
 
 		fantastico.agregarAEquipo(robin)
-	    fantastico.agregarAEquipo(mordred)					
+		fantastico.agregarAEquipo(mordred)
 		oscuro.agregarAEquipo(batman)
 		oscuro.agregarAEquipo(greenArrow)
 		oscuro.agregarAEquipo(robin)
@@ -159,16 +162,53 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 			nombre = "navaja"
 			alcance = 2
 			peso = 5
+			precio = 250
 			danio = 7
 			resistencia = 2
+			imagen = "https://images-na.ssl-images-amazon.com/images/I/61cFjZ9t0EL._SX466_.jpg"
 		]
 		bazooka = new Item() => [
 			nombre = "bazooka"
 			alcance = 10
 			peso = 10
-			danio = 10
+			precio = 15000
+			danio = 30
 			resistencia = 10
+			imagen = "https://staticserver2.com/edu/static/pl/800/bazooka.jpg"
 		]
+		espada = new Item() => [
+			nombre = "espada"
+			alcance = 5
+			peso = 10
+			precio = 2500
+			danio = 7
+			resistencia = 2
+			imagen = "https://images-na.ssl-images-amazon.com/images/I/61RDbIYwloL._SY355_.jpg"
+		]
+		granada = new Item() => [
+			nombre = "granada"
+			alcance = 20
+			peso = 2
+			precio = 900
+			danio = 20
+			resistencia = 1
+			imagen = "https://upload.wikimedia.org/wikipedia/commons/0/0d/F1_grenade_DoD.jpg"
+		]
+		espejoMagico = new ItemCompuesto => [
+			nombre = "espejoMagico"
+			imagen = "https://decorativecrafts.com/wp-content/uploads/2015/06/389silo-x.jpg"
+		]
+
+		primerItem = new ItemComprado(espada,5)
+		segundoItem = new ItemComprado(granada,8)
+		
+		mordred.itemsComprados.add(primerItem)
+		mordred.itemsComprados.add(segundoItem)
+		
+//		mordred.listaItemPorTiempo.add(primerItem)
+//		mordred.listaItemPorTiempo.add(segundoItem)
+		mordred.listaItemPorTiempo.add(espada)
+		mordred.listaItemPorTiempo.add(granada)		
 		
 		robin.agregarItemYOrdenaLista(navaja)
 		robin.agregarItemYOrdenaLista(bazooka)
@@ -177,8 +217,11 @@ class HeroesBootstrap extends CollectionBasedBootstrap {
 		robin.agregaEnemigo(joker)
 		repositorioItems.agregarElemento(navaja)
 		repositorioItems.agregarElemento(bazooka)
+//		repositorioItems.agregarElemento(espejoMagico)
 		
-		repositorioItems.agregarElemento(espejoMagico)
+		repositorioItems.agregarElemento(granada,22)
+		repositorioItems.agregarElemento(espada,34)
+		
 //		repositorioItems.agregarElemento(navaja)
 //		repositorioItems.agregarElemento(bazooka)
 //		repositorioItems.agregarElemento(navaja)

@@ -4,6 +4,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
 import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.commons.model.annotations.Transactional
+import java.time.LocalDate
 
 //@Accessors
 //@Observable
@@ -39,6 +40,8 @@ class Item extends Entidad{
 	var double resistencia
 	@Accessors Boolean sobrenatural = false
 	@Accessors var double porcentaje
+	@Accessors LocalDate fechaCompra
+	String imagen
 
 	def aumentarAtaque() {
 		if (sobrenatural)
@@ -141,4 +144,9 @@ class Mejora {
 		(atributo / 100) + 1
 	}
 
+}
+
+@Accessors
+class ItemTemporal extends Item{
+	var int cantidad
 }

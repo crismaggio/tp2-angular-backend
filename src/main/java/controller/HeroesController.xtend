@@ -17,6 +17,9 @@ import dominio.Superjson
 import dominio.RepoItem
 import org.uqbar.xtrest.api.annotation.Put
 import dominio.UsuarioAuxiliar
+import dominio.Item
+import dominio.ItemComprado
+import dominio.ItemTemporal
 
 @Controller
 class HeroesController {
@@ -71,21 +74,29 @@ class HeroesController {
 
 	@Get("/items")
 	def Result items() {
-		ok(RepoItem.instance.elementos.toJson)
+//		println("(RepoItem.instance.itemsComprados.toJson" + (RepoItem.instance.itemsComprados.toJson))
+		ok(RepoItem.instance.itemsComprados.toJson)
 	}
 	
 	@Get("/items/:id")
 	def Result itemById() {
-		ok(RepoItem.instance.searchById(id).toJson)
+//		println("(RepoItem.instance.searchItemCompradoById.toJson" + (RepoItem.instance.searchItemCompradoById(id).toJson))
+		ok(RepoItem.instance.searchItemCompradoById(id).toJson)
 	}
 	
 	@Get("/usuario/:id")
 	def Result usuarioid() {
-
 		val SuperIndividuo usuario = RepoIndividuo.instance.searchById(id)
-
+//    	usuario.actualizarListaItemsCompradosDuranteUltimaSemana()
 		ok(usuario.toJson)
-
+	}
+	
+	@Get("/ultimas-compras/:id")
+	def Result ultimosItemsCompradosPorUsuario() {
+		val SuperIndividuo usuario = RepoIndividuo.instance.searchById(id)
+	
+		// Falta ajustar el filtrado de items comprados en esta semana
+		ok(usuario.itemsComprados.toJson)
 	}
 
 	@Get("/username/:alias/password/:password")
@@ -197,19 +208,15 @@ class HeroesController {
 		}
 	}
 
-	@Post("/usuarios/:id/equipos")
-	def Result agregarEventoPropio(@Body String body) {
-
-		var SuperIndividuousuariod = RepoIndividuo.instance.searchById(id)
-		var EquipoTemp equipotem = body.fromJson(EquipoTemp)
-		var SuperIndividuolider = RepoIndividuo.instance.searchById(equipotem.idlider)
-		var SuperIndividuofundador = RepoIndividuo.instance.searchById(equipotem.idfundador)
-		var Equipo equipo = RepoEquipo.instance.searchById(equipotem.id)
-		equipo.lider = SuperIndividuolider
-		equipo.fundador = SuperIndividuofundador
-		print("xz<x<z")
-		equipo.nombre = equipotem.nombre
-		ok()
+	@Post("/items/:id/compra")
+	def Result usuarioCompraItem(@Body String body) {
+		println("la compra del item me da:" + body)
+		var itemCompradot = body.fromJson( ItemTemporal)
+		var nuevoItem = new ItemComprado(itemCompradot,itemCompradot.cantidad)
+		var usuario = RepoIndividuo.instance.searchById(id)
+		usuario.itemsComprados.add(nuevoItem)
+//		usuario.items.add(itemComprado)
+		ok("Item/s comprado/s exitosamente")
 	}
 
 //
