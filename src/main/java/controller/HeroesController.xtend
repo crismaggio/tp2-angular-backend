@@ -213,6 +213,7 @@ class HeroesController {
 		println("la compra del item me da:" + body)
 		var itemCompradot = body.fromJson( ItemTemporal)
 		var nuevoItem = new ItemComprado(itemCompradot,itemCompradot.cantidad)
+	RepoItem.instance.searchItemCompradoById(itemCompradot.id).cantidad=RepoItem.instance.searchItemCompradoById(itemCompradot.id).cantidad-itemCompradot.cantidad
 		var usuario = RepoIndividuo.instance.searchById(id)
 		usuario.itemsComprados.add(nuevoItem)
 //		usuario.items.add(itemComprado)
